@@ -9,7 +9,7 @@
 body{
   margin:0;
   overflow:hidden;
-  background:#ffe6f0;
+  background:linear-gradient(135deg,#ffd6e8,#ffeef6);
   font-family:'Segoe UI',sans-serif;
 }
 
@@ -27,54 +27,44 @@ body{
   transform:translateX(-50%) rotateX(180deg) scale(1.1);
 }
 
-/* Card */
+/* Card Base */
 .card{
   display:none;
-  position:absolute;
+  position:fixed;
+  top:50%;
   left:50%;
-  transform:translateX(-50%);
-  background:white;
-  width:320px;
-  padding:26px;
-  border-radius:20px;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
-  animation:slideUp 3s ease forwards;
-}
-#questionCard{ top:60%; }
-#finalCard{ top:50%; animation:fadeIn 3s ease forwards; }
-
-@keyframes slideUp{
-  from{top:75%;opacity:0}
-  to{top:42%;opacity:1}
-}
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
+  transform:translate(-50%,-50%);
+  width:340px;
+  height:460px;               /* FIXED HEIGHT */
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(6px);
+  border-radius:24px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.15);
+  padding:24px;
 }
 
-#name{
-  font-size:24px;
+/* Header */
+.card h2{
+  margin:0;
   color:#ff4d6d;
-  margin-bottom:12px;
   font-weight:600;
 }
 
-button{
-  padding:10px 28px;
-  font-size:18px;
-  border:none;
-  border-radius:30px;
-  margin:12px;
+/* Text area (typing happens here) */
+.text-area{
+  margin-top:16px;
+  height:280px;               /* FIXED */
+  overflow-y:auto;
+  text-align:left;
+  font-size:16px;
+  line-height:1.8;
+  color:#444;
+  padding-right:4px;
 }
-#yes{background:#ff4d6d;color:white;}
-#no{background:#666;color:white;position:relative;}
-#replay{background:#ffb3c6;color:#333;}
 
 /* Cursor */
 #cursor{
-  display:inline-block;
-  margin-left:2px;
+  color:#ff4d6d;
   animation:blink 1s infinite;
 }
 @keyframes blink{
@@ -82,36 +72,40 @@ button{
   25%,75%{opacity:0}
 }
 
-/* ===== CLOUD POPUPS ===== */
+/* Buttons */
+button{
+  margin-top:16px;
+  padding:10px 26px;
+  font-size:17px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+}
+#yes{background:#ff4d6d;color:white;}
+#no{background:#777;color:white;position:relative;}
+#replay{background:#ffd1df;color:#333;}
+
+/* Clouds */
 .popup{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.4);
+  background:rgba(0,0,0,0.35);
 }
 .cloud{
-  position:relative;
   background:#fff;
   width:300px;
-  padding:30px 25px;
+  padding:28px;
   border-radius:60px;
   text-align:center;
   margin:40% auto;
   box-shadow:0 10px 25px rgba(0,0,0,0.15);
-  animation:floatCloud 4s ease-in-out infinite;
+  animation:float 4s ease-in-out infinite;
 }
-@keyframes floatCloud{
+@keyframes float{
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-10px)}
 }
-.cloud::before,.cloud::after{
-  content:"";
-  position:absolute;
-  background:#fff;
-  border-radius:50%;
-}
-.cloud::before{width:80px;height:80px;top:-40px;left:40px;}
-.cloud::after{width:100px;height:100px;top:-50px;right:40px;}
 
 /* Hearts & petals */
 .heart,.petal{
@@ -140,32 +134,24 @@ button{
 
 <!-- Question Card -->
 <div class="card" id="questionCard">
-  <div id="name">Ashwini 💖</div>
-  Will you be my Valentine? 💌
-  <br><br>
+  <h2>Ashwini 💖</h2>
+  <p style="margin-top:18px;">Will you be my Valentine? 💌</p>
   <button id="yes">Yes</button>
   <button id="no">No</button>
 </div>
 
-<!-- Popup 1 -->
+<!-- Cloud Popups -->
 <div class="popup" id="p1">
   <div class="cloud">
-    ☁️ Are you sure? 🥺<br>
-    Please think once more…<br><br>
-    Will you be my Valentine? 💌
-    <br><br>
+    ☁️ Are you sure? 🥺<br><br>
     <button onclick="closeP1()">Yes</button>
     <button onclick="closeP1()">No</button>
   </div>
 </div>
 
-<!-- Popup 2 -->
 <div class="popup" id="p2">
   <div class="cloud">
-    ☁️ Still no? 💔<br>
-    You’re really breaking my heart…<br><br>
-    Will you be my Valentine? 💌
-    <br><br>
+    ☁️ Still no? 💔<br><br>
     <button onclick="enableRun()">Yes</button>
     <button onclick="enableRun()">No</button>
   </div>
@@ -173,10 +159,9 @@ button{
 
 <!-- Final Card -->
 <div class="card" id="finalCard">
-  <div id="name">Ashwini 💗</div>
-  <div id="finalText" style="text-align:left;font-size:16px;line-height:1.8;"></div>
+  <h2>Ashwini 💗</h2>
+  <div class="text-area" id="finalText"></div>
   <span id="cursor">|</span>
-  <br><br>
   <button id="replay">🔁 Replay</button>
 </div>
 
@@ -203,11 +188,10 @@ envelope.onclick=()=>{
 };
 
 no.onclick=()=>document.getElementById("p1").style.display="block";
-function closeP1(){document.getElementById("p1").style.display="none";document.getElementById("p2").style.display="block";}
+function closeP1(){p1.style.display="none";p2.style.display="block";}
 function enableRun(){
-  document.getElementById("p2").style.display="none";
+  p2.style.display="none";
   no.onmouseover=()=>{
-    no.style.position="absolute";
     no.style.left=Math.random()*80+"%";
     no.style.top=Math.random()*80+"%";
   };
@@ -218,38 +202,36 @@ document.getElementById("yes").onclick=()=>{
   setTimeout(()=>{
     questionCard.style.display="none";
     finalCard.style.display="block";
-    fadeOutMusic();
-    typeFinalMessage();
+    fadeMusic();
+    typeMessage();
   },2500);
 };
 
-/* Typing effect + sound */
 const message=`🌸 Hey Ashwini,
 
 I know I haven’t always been perfect.
-There were moments where my words hurt you,
-my actions disappointed you,
-and my silence made things worse 💔
+I know I made mistakes that hurt you 💔
 
-But one thing has always been true —
-my feelings for you have never been fake ❤️
+But one thing never changed —
+my feelings for you ❤️
 
 I don’t promise perfection,
-but I promise honesty, effort, patience,
+but I promise effort, honesty,
 and a heart that chooses you every single day 🤍
 
 No pressure. No forcing.
 Just a genuine heart asking —
 can we walk this journey together? 💖`;
 
-function typeFinalMessage(){
+function typeMessage(){
   finalText.innerHTML="";
-  cursor.style.display="inline-block";
+  cursor.style.display="inline";
   let i=0;
   typeSound.volume=0.15;
   typeSound.play();
   const interval=setInterval(()=>{
     finalText.innerHTML+=message.charAt(i).replace(/\n/g,"<br>");
+    finalText.scrollTop=finalText.scrollHeight;
     i++;
     if(i>=message.length){
       clearInterval(interval);
@@ -259,15 +241,13 @@ function typeFinalMessage(){
   },45);
 }
 
-/* Fade-out music */
-function fadeOutMusic(){
-  const fade=setInterval(()=>{
-    if(bgMusic.volume>0.02){bgMusic.volume-=0.02;}
-    else{bgMusic.pause();clearInterval(fade);}
+function fadeMusic(){
+  const f=setInterval(()=>{
+    if(bgMusic.volume>0.02) bgMusic.volume-=0.02;
+    else{bgMusic.pause();clearInterval(f);}
   },300);
 }
 
-/* Replay */
 document.getElementById("replay").onclick=()=>location.reload();
 
 function hearts(){
