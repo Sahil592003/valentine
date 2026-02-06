@@ -16,34 +16,50 @@ body{
 /* Envelope */
 #envelope{
   position:absolute;
-  top:38%;
+  top:40%;
   left:50%;
   transform:translateX(-50%);
   font-size:110px;
   cursor:pointer;
   transition:transform 2.5s ease;
 }
-.opened{
-  transform:translateX(-50%) rotateX(180deg) scale(1.15);
+#envelope.opened{
+  transform:translateX(-50%) rotateX(180deg) scale(1.1);
 }
 
-/* Card */
-#card{
+/* Card (question + final) */
+.card{
   display:none;
   position:absolute;
-  top:60%;
   left:50%;
-  transform:translate(-50%,-50%);
+  transform:translateX(-50%);
   background:white;
   width:320px;
-  padding:28px;
+  padding:26px;
   border-radius:20px;
   text-align:center;
-  animation:slideUp 3.5s ease forwards;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  animation:slideUp 3s ease forwards;
 }
+
+#questionCard{
+  top:60%;
+}
+
+#finalCard{
+  top:50%;
+  display:none;
+  animation:fadeIn 3s ease forwards;
+}
+
 @keyframes slideUp{
   from{top:75%;opacity:0}
   to{top:42%;opacity:1}
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
 }
 
 #name{
@@ -61,7 +77,11 @@ button{
   margin:12px;
 }
 #yes{background:#ff4d6d;color:white;}
-#no{background:#666;color:white;position:relative;}
+#no{
+  background:#666;
+  color:white;
+  position:relative;
+}
 
 /* Popups */
 .popup{
@@ -89,77 +109,27 @@ button{
 @keyframes fall{
   to{top:110%;opacity:0}
 }
-
-/* Final message */
-#final{
-  display:none;
-  position:fixed;
-  inset:6%;
-  background:rgba(255,255,255,0.97);
-  padding:24px;
-  border-radius:22px;
-  overflow:auto;
-  font-size:16px;
-  line-height:1.8;
-}
-
-/* Hug with slow zoom */
-#hug{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(255,230,240,0.96);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:90px;
-  animation:hugZoom 12s ease forwards;
-}
-
-@keyframes hugZoom{
-  from{transform:scale(1);opacity:0}
-  to{transform:scale(1.4);opacity:1}
-}
-
-/* Stay screen */
-#stay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#ffeff6;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-size:26px;
-  color:#ff4d6d;
-  padding:20px;
-  animation:fadeIn 4s ease forwards;
-}
-
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
 </style>
 </head>
 
 <body>
 
-<!-- Sounds -->
+<!-- Envelope sound -->
 <audio id="openSound" preload="auto">
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_2f6e0b6c98.mp3">
 </audio>
 
+<!-- Background music -->
 <audio id="bgMusic" preload="auto" loop>
   <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_2c7b0e4d5b.mp3">
 </audio>
 
 <div id="envelope">💌</div>
 
-<div id="card">
+<!-- Question Card -->
+<div class="card" id="questionCard">
   <div id="name">Ashwini 💖</div>
-  Will you be my Valentine?
+  Will you be my Valentine? 💌
   <br><br>
   <button id="yes">Yes</button>
   <button id="no">No</button>
@@ -168,7 +138,9 @@ button{
 <!-- Popups -->
 <div class="popup" id="p1">
   <div class="popupBox">
-    Are you sure? Please think once more 🥺
+    Are you sure? 🥺  
+    Please think once more…
+    Will you be my Valentine? 💌
     <br><br>
     <button onclick="closeP1()">Yes</button>
     <button onclick="closeP1()">No</button>
@@ -177,121 +149,114 @@ button{
 
 <div class="popup" id="p2">
   <div class="popupBox">
-    Are you really sure? 💔
+    Still no? 💔  
+    You’re really breaking my heart…
+    Will you be my Valentine? 💌
     <br><br>
     <button onclick="enableRun()">Yes</button>
     <button onclick="enableRun()">No</button>
   </div>
 </div>
 
-<div id="final"></div>
-<div id="hug">🤍🫂🤍</div>
-<div id="stay">Stay with me 🤍<br>Always.</div>
+<!-- Final Emotional Card -->
+<div class="card" id="finalCard">
+  <div id="name">Ashwini 💗</div>
+  <div style="text-align:left;font-size:16px;line-height:1.8;">
+    🌸 Hey Ashwini,<br><br>
+
+    I know I haven’t always been perfect.  
+    I know there were moments where my words hurt you,  
+    where my actions disappointed you,  
+    and where my silence made things worse. 💔<br><br>
+
+    But one thing has always been true —  
+    my feelings for you have never been fake. ❤️<br><br>
+
+    I don’t want to promise you a flawless story,  
+    but I do promise you honesty, effort, loyalty,  
+    and a heart that chooses you every single day. 🤍<br><br>
+
+    If you ever feel unsure, I’ll listen.  
+    If you ever feel weak, I’ll stand by you.  
+    If you ever feel scared, I’ll hold your hand — not tightly,  
+    but gently, so you always feel safe. 🫶<br><br>
+
+    I don’t just want you for today or for Valentine’s Day…  
+    I want you in my life, in my tomorrow,  
+    and in all the little moments in between. 🌷<br><br>
+
+    No pressure. No forcing.  
+    Just a genuine heart asking —  
+    can we walk this journey together? 💖
+  </div>
+</div>
 
 <script>
-const envelope=document.getElementById("envelope");
-const card=document.getElementById("card");
-const no=document.getElementById("no");
-const openSound=document.getElementById("openSound");
-const bgMusic=document.getElementById("bgMusic");
-const final=document.getElementById("final");
-const hug=document.getElementById("hug");
-const stay=document.getElementById("stay");
+const envelope = document.getElementById("envelope");
+const questionCard = document.getElementById("questionCard");
+const finalCard = document.getElementById("finalCard");
+const no = document.getElementById("no");
+const openSound = document.getElementById("openSound");
+const bgMusic = document.getElementById("bgMusic");
 
-envelope.onclick=()=>{
+envelope.onclick = () => {
   openSound.play();
-  bgMusic.volume=0.25;
+  bgMusic.volume = 0.25;
   bgMusic.play();
   envelope.classList.add("opened");
-  setTimeout(()=>{
-    envelope.style.display="none";
-    card.style.display="block";
-  },2000);
-}
+  setTimeout(() => {
+    envelope.style.display = "none";
+    questionCard.style.display = "block";
+  }, 2000);
+};
 
-no.onclick=()=>document.getElementById("p1").style.display="block";
+no.onclick = () => document.getElementById("p1").style.display = "block";
 
 function closeP1(){
-  document.getElementById("p1").style.display="none";
-  document.getElementById("p2").style.display="block";
+  document.getElementById("p1").style.display = "none";
+  document.getElementById("p2").style.display = "block";
 }
 
 function enableRun(){
-  document.getElementById("p2").style.display="none";
-  no.onmouseover=()=>{
-    no.style.position="absolute";
-    no.style.left=Math.random()*80+"%";
-    no.style.top=Math.random()*80+"%";
-  }
+  document.getElementById("p2").style.display = "none";
+  no.onmouseover = () => {
+    no.style.position = "absolute";
+    no.style.left = Math.random() * 80 + "%";
+    no.style.top = Math.random() * 80 + "%";
+  };
 }
 
-document.getElementById("yes").onclick=()=>{
+document.getElementById("yes").onclick = () => {
   hearts();
   petals();
-  typeMessage();
-  setTimeout(()=>hug.style.display="flex",30000);
-  setTimeout(()=>{
-    hug.style.display="none";
-    stay.style.display="flex";
-  },45000);
-}
+  setTimeout(() => {
+    questionCard.style.display = "none";
+    finalCard.style.display = "block";
+  }, 2500);
+};
 
 function hearts(){
-  setInterval(()=>{
-    let h=document.createElement("div");
-    h.className="heart";
-    h.innerText="❤️";
-    h.style.left=Math.random()*100+"%";
-    h.style.top="0";
+  setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "❤️";
+    h.style.left = Math.random() * 100 + "%";
+    h.style.top = "0";
     document.body.appendChild(h);
-    setTimeout(()=>h.remove(),7000);
-  },300);
+    setTimeout(() => h.remove(), 7000);
+  }, 300);
 }
 
 function petals(){
-  setInterval(()=>{
-    let p=document.createElement("div");
-    p.className="petal";
-    p.innerText="🌸";
-    p.style.left=Math.random()*100+"%";
-    p.style.top="0";
+  setInterval(() => {
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.innerText = "🌸";
+    p.style.left = Math.random() * 100 + "%";
+    p.style.top = "0";
     document.body.appendChild(p);
-    setTimeout(()=>p.remove(),7000);
-  },400);
-}
-
-/* Typing effect */
-const message=`Ashwini…
-
-I want to be honest with you, completely and quietly.
-
-I know I have hurt you before —
-with my words, my actions,
-and sometimes with my silence.
-
-You matter to me more than I ever showed.
-More than I ever explained.
-
-I don’t promise perfection.
-But I promise effort.
-Patience.
-Loyalty.
-And a heart that chooses you —
-every single day.
-
-If you let me,
-I want to stay.
-Not just today,
-but always.`;
-
-function typeMessage(){
-  final.style.display="block";
-  let i=0;
-  const interval=setInterval(()=>{
-    final.innerHTML+=message.charAt(i);
-    i++;
-    if(i>=message.length) clearInterval(interval);
-  },55);
+    setTimeout(() => p.remove(), 7000);
+  }, 400);
 }
 </script>
 
