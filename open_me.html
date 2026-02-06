@@ -6,7 +6,6 @@
 <title>For Ashwini ❤️</title>
 
 <style>
-/* ===== COLOR VARIABLES ===== */
 :root{
   --rose:#ff4d6d;
   --rose-soft:#ffd1dc;
@@ -16,7 +15,6 @@
   --shadow:0 20px 40px rgba(0,0,0,0.15);
 }
 
-/* ===== BASE ===== */
 body{
   margin:0;
   overflow:hidden;
@@ -25,7 +23,7 @@ body{
   color:var(--text-dark);
 }
 
-/* ===== ENVELOPE SCREEN ===== */
+/* Envelope */
 #envelope{
   position:absolute;
   top:40%;
@@ -40,7 +38,7 @@ body{
   transform:translateX(-50%) rotateX(180deg) scale(1.15);
 }
 
-/* ===== CARD BASE ===== */
+/* Card */
 .card{
   display:none;
   position:fixed;
@@ -56,7 +54,6 @@ body{
   padding:26px;
 }
 
-/* ===== CARD HEADER ===== */
 .card h2{
   margin:0;
   text-align:center;
@@ -64,7 +61,7 @@ body{
   font-weight:600;
 }
 
-/* ===== TEXT AREA ===== */
+/* Text area */
 .text-area{
   margin-top:16px;
   height:300px;
@@ -74,7 +71,7 @@ body{
   padding-right:6px;
 }
 
-/* ===== CURSOR ===== */
+/* Cursor */
 #cursor{
   color:var(--rose);
   animation:blink 1s infinite;
@@ -84,7 +81,7 @@ body{
   25%,75%{opacity:0}
 }
 
-/* ===== BUTTONS ===== */
+/* Buttons */
 button{
   margin-top:18px;
   padding:12px 30px;
@@ -92,11 +89,6 @@ button{
   border:none;
   border-radius:30px;
   cursor:pointer;
-  transition:transform .2s ease, box-shadow .2s ease;
-}
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 6px 15px rgba(0,0,0,0.15);
 }
 #yes{
   background:linear-gradient(135deg,#ff4d6d,#ff758f);
@@ -112,14 +104,13 @@ button:hover{
   color:#333;
 }
 
-/* ===== CLOUD POPUPS ===== */
+/* Cloud popups */
 .popup{
   display:none;
   position:fixed;
   inset:0;
   background:rgba(255,200,215,0.55);
 }
-
 .cloud{
   background:var(--card-white);
   width:300px;
@@ -135,7 +126,7 @@ button:hover{
   50%{transform:translateY(-12px)}
 }
 
-/* ===== HEARTS & PETALS ===== */
+/* Hearts & petals */
 .heart,.petal{
   position:absolute;
   font-size:26px;
@@ -204,48 +195,18 @@ button:hover{
 </div>
 
 <script>
-const envelope=document.getElementById("envelope");
-const questionCard=document.getElementById("questionCard");
-const finalCard=document.getElementById("finalCard");
-const finalText=document.getElementById("finalText");
-const cursor=document.getElementById("cursor");
-const no=document.getElementById("no");
-const openSound=document.getElementById("openSound");
-const bgMusic=document.getElementById("bgMusic");
-const typeSound=document.getElementById("typeSound");
+const envelope = document.getElementById("envelope");
+const questionCard = document.getElementById("questionCard");
+const finalCard = document.getElementById("finalCard");
+const finalText = document.getElementById("finalText");
+const cursor = document.getElementById("cursor");
+const no = document.getElementById("no");
 
-envelope.onclick=()=>{
-  openSound.play();
-  bgMusic.volume=0.25;
-  bgMusic.play();
-  envelope.classList.add("opened");
-  setTimeout(()=>{
-    envelope.style.display="none";
-    questionCard.style.display="block";
-  },2000);
-};
+const openSound = document.getElementById("openSound");
+const bgMusic = document.getElementById("bgMusic");
+const typeSound = document.getElementById("typeSound");
 
-no.onclick=()=>p1.style.display="block";
-function closeP1(){p1.style.display="none";p2.style.display="block";}
-function enableRun(){
-  p2.style.display="none";
-  no.onmouseover=()=>{
-    no.style.left=Math.random()*80+"%";
-    no.style.top=Math.random()*80+"%";
-  };
-}
-
-document.getElementById("yes").onclick=()=>{
-  hearts();petals();
-  setTimeout(()=>{
-    questionCard.style.display="none";
-    finalCard.style.display="block";
-    fadeMusic();
-    typeMessage();
-  },2500);
-};
-
-const message=`🌸 Hey Ashwini,
+const message = `🌸 Hey Ashwini,
 
 I know I haven’t always been perfect.
 I know I made mistakes that hurt you 💔
@@ -261,54 +222,96 @@ No pressure. No forcing.
 Just a genuine heart asking —
 can we walk this journey together? 💖`;
 
+envelope.onclick = () => {
+  openSound.play();
+  bgMusic.volume = 0.25;
+  bgMusic.play();
+  envelope.classList.add("opened");
+  setTimeout(() => {
+    envelope.style.display = "none";
+    questionCard.style.display = "block";
+  }, 2000);
+};
+
+no.onclick = () => p1.style.display = "block";
+function closeP1(){ p1.style.display = "none"; p2.style.display = "block"; }
+function enableRun(){
+  p2.style.display = "none";
+  no.onmouseover = () => {
+    no.style.left = Math.random()*80 + "%";
+    no.style.top = Math.random()*80 + "%";
+  };
+}
+
+document.getElementById("yes").onclick = () => {
+  hearts(); petals();
+  setTimeout(() => {
+    questionCard.style.display = "none";
+    finalCard.style.display = "block";
+    fadeMusic();
+    typeMessage();
+  }, 2500);
+};
+
+/* 🔥 FIXED TYPING FUNCTION */
 function typeMessage(){
-  finalText.innerHTML="";
-  cursor.style.display="inline";
-  let i=0;
-  typeSound.volume=0.15;
+  finalText.innerHTML = "";
+  cursor.style.display = "inline";
+
+  let i = 0;
+  let currentText = "";
+
+  typeSound.volume = 0.15;
   typeSound.play();
-  const interval=setInterval(()=>{
-    finalText.innerHTML+=message.charAt(i).replace(/\n/g,"<br>");
-    finalText.scrollTop=finalText.scrollHeight;
+
+  const interval = setInterval(() => {
+    currentText += message[i];
+    finalText.innerHTML = currentText.replace(/\n/g,"<br>");
+    finalText.scrollTop = finalText.scrollHeight;
     i++;
-    if(i>=message.length){
+
+    if(i >= message.length){
       clearInterval(interval);
       typeSound.pause();
-      typeSound.currentTime=0;
+      typeSound.currentTime = 0;
     }
-  },45);
+  }, 45);
 }
 
 function fadeMusic(){
-  const f=setInterval(()=>{
-    if(bgMusic.volume>0.02) bgMusic.volume-=0.02;
-    else{bgMusic.pause();clearInterval(f);}
-  },300);
+  const f = setInterval(() => {
+    if(bgMusic.volume > 0.02){
+      bgMusic.volume -= 0.02;
+    }else{
+      bgMusic.pause();
+      clearInterval(f);
+    }
+  }, 300);
 }
 
-document.getElementById("replay").onclick=()=>location.reload();
+document.getElementById("replay").onclick = () => location.reload();
 
 function hearts(){
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.innerText="❤️";
-    h.style.left=Math.random()*100+"%";
-    h.style.top="0";
+  setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "❤️";
+    h.style.left = Math.random()*100 + "%";
+    h.style.top = "0";
     document.body.appendChild(h);
-    setTimeout(()=>h.remove(),7000);
-  },300);
+    setTimeout(() => h.remove(), 7000);
+  }, 300);
 }
 function petals(){
-  setInterval(()=>{
-    const p=document.createElement("div");
-    p.className="petal";
-    p.innerText="🌸";
-    p.style.left=Math.random()*100+"%";
-    p.style.top="0";
+  setInterval(() => {
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.innerText = "🌸";
+    p.style.left = Math.random()*100 + "%";
+    p.style.top = "0";
     document.body.appendChild(p);
-    setTimeout(()=>p.remove(),7000);
-  },400);
+    setTimeout(() => p.remove(), 7000);
+  }, 400);
 }
 </script>
 
