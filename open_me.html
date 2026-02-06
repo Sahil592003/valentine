@@ -27,7 +27,7 @@ body{
   transform:translateX(-50%) rotateX(180deg) scale(1.1);
 }
 
-/* Card (question + final) */
+/* Card */
 .card{
   display:none;
   position:absolute;
@@ -41,22 +41,13 @@ body{
   box-shadow:0 10px 25px rgba(0,0,0,0.15);
   animation:slideUp 3s ease forwards;
 }
-
-#questionCard{
-  top:60%;
-}
-
-#finalCard{
-  top:50%;
-  display:none;
-  animation:fadeIn 3s ease forwards;
-}
+#questionCard{ top:60%; }
+#finalCard{ top:50%; animation:fadeIn 3s ease forwards; }
 
 @keyframes slideUp{
   from{top:75%;opacity:0}
   to{top:42%;opacity:1}
 }
-
 @keyframes fadeIn{
   from{opacity:0}
   to{opacity:1}
@@ -77,27 +68,52 @@ button{
   margin:12px;
 }
 #yes{background:#ff4d6d;color:white;}
-#no{
-  background:#666;
-  color:white;
-  position:relative;
+#no{background:#666;color:white;position:relative;}
+#replay{
+  background:#ffb3c6;
+  color:#333;
 }
 
-/* Popups */
+/* ===== CLOUD POPUPS ===== */
 .popup{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.4);
 }
-.popupBox{
-  background:white;
-  padding:22px;
-  border-radius:22px;
+
+/* Floating cloud */
+.cloud{
+  position:relative;
+  background:#fff;
+  width:300px;
+  padding:30px 25px;
+  border-radius:60px;
   text-align:center;
-  width:80%;
-  max-width:300px;
-  margin:38% auto;
+  margin:40% auto;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  animation:floatCloud 4s ease-in-out infinite;
+}
+
+@keyframes floatCloud{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+.cloud::before,
+.cloud::after{
+  content:"";
+  position:absolute;
+  background:#fff;
+  border-radius:50%;
+}
+.cloud::before{
+  width:80px;height:80px;
+  top:-40px;left:40px;
+}
+.cloud::after{
+  width:100px;height:100px;
+  top:-50px;right:40px;
 }
 
 /* Hearts & petals */
@@ -114,12 +130,10 @@ button{
 
 <body>
 
-<!-- Envelope sound -->
+<!-- Sounds -->
 <audio id="openSound" preload="auto">
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_2f6e0b6c98.mp3">
 </audio>
-
-<!-- Background music -->
 <audio id="bgMusic" preload="auto" loop>
   <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_2c7b0e4d5b.mp3">
 </audio>
@@ -135,11 +149,11 @@ button{
   <button id="no">No</button>
 </div>
 
-<!-- Popups -->
+<!-- Popup 1 -->
 <div class="popup" id="p1">
-  <div class="popupBox">
-    Are you sure? 🥺  
-    Please think once more…
+  <div class="cloud">
+    ☁️ Are you sure? 🥺<br>
+    Please think once more…<br><br>
     Will you be my Valentine? 💌
     <br><br>
     <button onclick="closeP1()">Yes</button>
@@ -147,10 +161,11 @@ button{
   </div>
 </div>
 
+<!-- Popup 2 -->
 <div class="popup" id="p2">
-  <div class="popupBox">
-    Still no? 💔  
-    You’re really breaking my heart…
+  <div class="cloud">
+    ☁️ Still no? 💔<br>
+    You’re really breaking my heart…<br><br>
     Will you be my Valentine? 💌
     <br><br>
     <button onclick="enableRun()">Yes</button>
@@ -158,105 +173,113 @@ button{
   </div>
 </div>
 
-<!-- Final Emotional Card -->
+<!-- Final Card -->
 <div class="card" id="finalCard">
   <div id="name">Ashwini 💗</div>
   <div style="text-align:left;font-size:16px;line-height:1.8;">
     🌸 Hey Ashwini,<br><br>
 
-    I know I haven’t always been perfect.  
-    I know there were moments where my words hurt you,  
-    where my actions disappointed you,  
-    and where my silence made things worse. 💔<br><br>
+    I know I haven’t always been perfect,  
+    but my feelings for you have always been real ❤️<br><br>
 
-    But one thing has always been true —  
-    my feelings for you have never been fake. ❤️<br><br>
-
-    I don’t want to promise you a flawless story,  
-    but I do promise you honesty, effort, loyalty,  
-    and a heart that chooses you every single day. 🤍<br><br>
-
-    If you ever feel unsure, I’ll listen.  
-    If you ever feel weak, I’ll stand by you.  
-    If you ever feel scared, I’ll hold your hand — not tightly,  
-    but gently, so you always feel safe. 🫶<br><br>
-
-    I don’t just want you for today or for Valentine’s Day…  
-    I want you in my life, in my tomorrow,  
-    and in all the little moments in between. 🌷<br><br>
+    I don’t promise perfection,  
+    but I promise honesty, effort, patience,  
+    and a heart that chooses you every single day 🤍<br><br>
 
     No pressure. No forcing.  
     Just a genuine heart asking —  
     can we walk this journey together? 💖
   </div>
+  <br>
+  <button id="replay">🔁 Replay</button>
 </div>
 
 <script>
-const envelope = document.getElementById("envelope");
-const questionCard = document.getElementById("questionCard");
-const finalCard = document.getElementById("finalCard");
-const no = document.getElementById("no");
-const openSound = document.getElementById("openSound");
-const bgMusic = document.getElementById("bgMusic");
+const envelope=document.getElementById("envelope");
+const questionCard=document.getElementById("questionCard");
+const finalCard=document.getElementById("finalCard");
+const no=document.getElementById("no");
+const openSound=document.getElementById("openSound");
+const bgMusic=document.getElementById("bgMusic");
 
-envelope.onclick = () => {
+let musicFadeInterval=null;
+
+envelope.onclick=()=>{
   openSound.play();
-  bgMusic.volume = 0.25;
+  bgMusic.volume=0.25;
   bgMusic.play();
   envelope.classList.add("opened");
-  setTimeout(() => {
-    envelope.style.display = "none";
-    questionCard.style.display = "block";
-  }, 2000);
+  setTimeout(()=>{
+    envelope.style.display="none";
+    questionCard.style.display="block";
+  },2000);
 };
 
-no.onclick = () => document.getElementById("p1").style.display = "block";
+no.onclick=()=>document.getElementById("p1").style.display="block";
 
 function closeP1(){
-  document.getElementById("p1").style.display = "none";
-  document.getElementById("p2").style.display = "block";
+  document.getElementById("p1").style.display="none";
+  document.getElementById("p2").style.display="block";
 }
 
 function enableRun(){
-  document.getElementById("p2").style.display = "none";
-  no.onmouseover = () => {
-    no.style.position = "absolute";
-    no.style.left = Math.random() * 80 + "%";
-    no.style.top = Math.random() * 80 + "%";
+  document.getElementById("p2").style.display="none";
+  no.onmouseover=()=>{
+    no.style.position="absolute";
+    no.style.left=Math.random()*80+"%";
+    no.style.top=Math.random()*80+"%";
   };
 }
 
-document.getElementById("yes").onclick = () => {
+document.getElementById("yes").onclick=()=>{
   hearts();
   petals();
-  setTimeout(() => {
-    questionCard.style.display = "none";
-    finalCard.style.display = "block";
-  }, 2500);
+  setTimeout(()=>{
+    questionCard.style.display="none";
+    finalCard.style.display="block";
+    fadeOutMusic();
+  },2500);
+};
+
+/* Fade-out music */
+function fadeOutMusic(){
+  musicFadeInterval=setInterval(()=>{
+    if(bgMusic.volume>0.02){
+      bgMusic.volume-=0.02;
+    }else{
+      bgMusic.pause();
+      clearInterval(musicFadeInterval);
+    }
+  },300);
+}
+
+/* Replay */
+document.getElementById("replay").onclick=()=>{
+  location.reload();
 };
 
 function hearts(){
-  setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerText = "❤️";
-    h.style.left = Math.random() * 100 + "%";
-    h.style.top = "0";
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"%";
+    h.style.top="0";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 7000);
-  }, 300);
+    setTimeout(()=>h.remove(),7000);
+  },300);
 }
 
 function petals(){
-  setInterval(() => {
-    const p = document.createElement("div");
-    p.className = "petal";
-    p.innerText = "🌸";
-    p.style.left = Math.random() * 100 + "%";
-    p.style.top = "0";
+  setInterval(()=>{
+    const p=document.createElement("div");
+    p.className="petal";
+    p.innerText="🌸";
+    p.style.left=Math.random()*100+"%";
+    p.style.top="0";
     document.body.appendChild(p);
-    setTimeout(() => p.remove(), 7000);
-  }, 400);
+    setTimeout(()=>p.remove(),7000);
+  },400);
 }
 </script>
 
