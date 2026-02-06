@@ -30,27 +30,16 @@ body{
 /* Card */
 .card{
   display:none;
-  position:absolute;
+  position:fixed;
+  top:50%;
   left:50%;
-  transform:translateX(-50%);
+  transform:translate(-50%,-50%);
   background:white;
   width:320px;
   padding:26px;
   border-radius:20px;
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,0.15);
-  animation:slideUp 3s ease forwards;
-}
-#questionCard{ top:60%; }
-#finalCard{ top:50%; animation:fadeIn 3s ease forwards; }
-
-@keyframes slideUp{
-  from{top:75%;opacity:0}
-  to{top:42%;opacity:1}
-}
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
 }
 
 #name{
@@ -82,7 +71,7 @@ button{
   25%,75%{opacity:0}
 }
 
-/* ===== CLOUD POPUPS ===== */
+/* Popups */
 .popup{
   display:none;
   position:fixed;
@@ -90,28 +79,14 @@ button{
   background:rgba(0,0,0,0.4);
 }
 .cloud{
-  position:relative;
   background:#fff;
   width:300px;
-  padding:30px 25px;
+  padding:30px;
   border-radius:60px;
   text-align:center;
   margin:40% auto;
   box-shadow:0 10px 25px rgba(0,0,0,0.15);
-  animation:floatCloud 4s ease-in-out infinite;
 }
-@keyframes floatCloud{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
-.cloud::before,.cloud::after{
-  content:"";
-  position:absolute;
-  background:#fff;
-  border-radius:50%;
-}
-.cloud::before{width:80px;height:80px;top:-40px;left:40px;}
-.cloud::after{width:100px;height:100px;top:-50px;right:40px;}
 
 /* Hearts & petals */
 .heart,.petal{
@@ -125,7 +100,6 @@ button{
 
 <body>
 
-<!-- Sounds -->
 <audio id="openSound" preload="auto">
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_2f6e0b6c98.mp3">
 </audio>
@@ -138,7 +112,7 @@ button{
 
 <div id="envelope">💌</div>
 
-<!-- Question Card -->
+<!-- Main Question -->
 <div class="card" id="questionCard">
   <div id="name">Ashwini 💖</div>
   Will you be my Valentine? 💌
@@ -150,50 +124,45 @@ button{
 <!-- Popup 1 -->
 <div class="popup" id="p1">
   <div class="cloud">
-    ☁️ Are you sure? 🥺<br>
-    Please think once more…<br><br>
-    Will you be my Valentine? 💌
-    <br><br>
-    <button onclick="closeP1()">Yes</button>
-    <button onclick="closeP1()">No</button>
+    Are you sure? 🥺<br><br>
+    <button onclick="popupYes()">Yes</button>
+    <button onclick="popupNo1()">No</button>
   </div>
 </div>
 
 <!-- Popup 2 -->
 <div class="popup" id="p2">
   <div class="cloud">
-    ☁️ Still no? 💔<br>
-    You’re really breaking my heart…<br><br>
-    Will you be my Valentine? 💌
-    <br><br>
-    <button onclick="enableRun()">Yes</button>
-    <button onclick="enableRun()">No</button>
+    Are you really sure? 💔<br><br>
+    <button onclick="popupYes()">Yes</button>
+    <button onclick="popupNo2()">No</button>
   </div>
 </div>
 
-<!-- Final Card -->
+<!-- Final Letter -->
 <div class="card" id="finalCard">
   <div id="name">Ashwini 💗</div>
   <div id="finalText" style="text-align:left;font-size:16px;line-height:1.8;"></div>
-  <span id="cursor">|</span>
-  <br><br>
+  <span id="cursor">|</span><br><br>
   <button id="replay">🔁 Replay</button>
 </div>
 
 <script>
-const envelope=document.getElementById("envelope");
-const questionCard=document.getElementById("questionCard");
-const finalCard=document.getElementById("finalCard");
-const finalText=document.getElementById("finalText");
-const cursor=document.getElementById("cursor");
-const no=document.getElementById("no");
-const openSound=document.getElementById("openSound");
-const bgMusic=document.getElementById("bgMusic");
-const typeSound=document.getElementById("typeSound");
+const envelope = document.getElementById("envelope");
+const questionCard = document.getElementById("questionCard");
+const finalCard = document.getElementById("finalCard");
+const finalText = document.getElementById("finalText");
+const cursor = document.getElementById("cursor");
+const noBtn = document.getElementById("no");
+const bgMusic = document.getElementById("bgMusic");
+const typeSound = document.getElementById("typeSound");
 
-envelope.onclick=()=>{
-  openSound.play();
-  bgMusic.volume=0.25;
+let runawayMode = false;
+
+/* Envelope */
+envelope.onclick = () => {
+  document.getElementById("openSound").play();
+  bgMusic.volume = 0.25;
   bgMusic.play();
   envelope.classList.add("opened");
   setTimeout(()=>{
@@ -202,37 +171,57 @@ envelope.onclick=()=>{
   },2000);
 };
 
-no.onclick=()=>document.getElementById("p1").style.display="block";
-function closeP1(){document.getElementById("p1").style.display="none";document.getElementById("p2").style.display="block";}
-function enableRun(){
+/* YES from main */
+document.getElementById("yes").onclick = finalYes;
+
+/* NO from main */
+noBtn.onclick = () => {
+  if(runawayMode) return;
+  document.getElementById("p1").style.display="block";
+};
+
+/* Popup logic */
+function popupYes(){
+  document.getElementById("p1").style.display="none";
   document.getElementById("p2").style.display="none";
-  no.onmouseover=()=>{
-    no.style.position="absolute";
-    no.style.left=Math.random()*80+"%";
-    no.style.top=Math.random()*80+"%";
+  finalYes();
+}
+
+function popupNo1(){
+  document.getElementById("p1").style.display="none";
+  document.getElementById("p2").style.display="block";
+}
+
+function popupNo2(){
+  document.getElementById("p2").style.display="none";
+  runawayMode = true;
+  questionCard.style.display="block";
+  noBtn.onmouseover = () => {
+    noBtn.style.position="absolute";
+    noBtn.style.left = Math.random()*80+"%";
+    noBtn.style.top = Math.random()*80+"%";
   };
 }
 
-document.getElementById("yes").onclick=()=>{
-  hearts();petals();
+/* Final YES */
+function finalYes(){
+  questionCard.style.display="none";
+  hearts(); petals();
   setTimeout(()=>{
-    questionCard.style.display="none";
     finalCard.style.display="block";
-    fadeOutMusic();
-    typeFinalMessage();
-  },2500);
-};
+    fadeMusic();
+    typeLetter();
+  },1200);
+}
 
-/* Typing effect + sound */
-const message=`🌸 Hey Ashwini,
+/* Typing */
+const message = `🌸 Hey Ashwini,
 
 I know I haven’t always been perfect.
-There were moments where my words hurt you,
-my actions disappointed you,
-and my silence made things worse 💔
+I know I made mistakes that hurt you 💔
 
-But one thing has always been true —
-my feelings for you have never been fake ❤️
+But one thing never changed —
+my feelings for you ❤️
 
 I don’t promise perfection,
 but I promise honesty, effort, patience,
@@ -242,14 +231,15 @@ No pressure. No forcing.
 Just a genuine heart asking —
 can we walk this journey together? 💖`;
 
-function typeFinalMessage(){
+function typeLetter(){
   finalText.innerHTML="";
-  cursor.style.display="inline-block";
-  let i=0;
+  cursor.style.display="inline";
+  let i=0, temp="";
   typeSound.volume=0.15;
   typeSound.play();
   const interval=setInterval(()=>{
-    finalText.innerHTML+=message.charAt(i).replace(/\n/g,"<br>");
+    temp += message[i];
+    finalText.innerHTML = temp.replace(/\n/g,"<br>");
     i++;
     if(i>=message.length){
       clearInterval(interval);
@@ -259,17 +249,18 @@ function typeFinalMessage(){
   },45);
 }
 
-/* Fade-out music */
-function fadeOutMusic(){
-  const fade=setInterval(()=>{
-    if(bgMusic.volume>0.02){bgMusic.volume-=0.02;}
-    else{bgMusic.pause();clearInterval(fade);}
+/* Fade music */
+function fadeMusic(){
+  const f=setInterval(()=>{
+    if(bgMusic.volume>0.02) bgMusic.volume-=0.02;
+    else{ bgMusic.pause(); clearInterval(f); }
   },300);
 }
 
 /* Replay */
-document.getElementById("replay").onclick=()=>location.reload();
+document.getElementById("replay").onclick = () => location.reload();
 
+/* Effects */
 function hearts(){
   setInterval(()=>{
     const h=document.createElement("div");
