@@ -6,65 +6,77 @@
 <title>For Ashwini ❤️</title>
 
 <style>
+/* ===== COLOR VARIABLES ===== */
+:root{
+  --rose:#ff4d6d;
+  --rose-soft:#ffd1dc;
+  --rose-light:#fff1f6;
+  --card-white:rgba(255,255,255,0.96);
+  --text-dark:#444;
+  --shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* ===== BASE ===== */
 body{
   margin:0;
   overflow:hidden;
-  background:linear-gradient(135deg,#ffd6e8,#ffeef6);
+  background:linear-gradient(135deg,#ffd6e8,#fff1f6);
   font-family:'Segoe UI',sans-serif;
+  color:var(--text-dark);
 }
 
-/* Envelope */
+/* ===== ENVELOPE SCREEN ===== */
 #envelope{
   position:absolute;
   top:40%;
   left:50%;
   transform:translateX(-50%);
-  font-size:110px;
+  font-size:120px;
   cursor:pointer;
+  filter:drop-shadow(0 8px 15px rgba(0,0,0,0.15));
   transition:transform 2.5s ease;
 }
 #envelope.opened{
-  transform:translateX(-50%) rotateX(180deg) scale(1.1);
+  transform:translateX(-50%) rotateX(180deg) scale(1.15);
 }
 
-/* Card Base */
+/* ===== CARD BASE ===== */
 .card{
   display:none;
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  width:340px;
-  height:460px;               /* FIXED HEIGHT */
-  background:rgba(255,255,255,0.95);
+  width:350px;
+  height:480px;
+  background:var(--card-white);
   backdrop-filter:blur(6px);
-  border-radius:24px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.15);
-  padding:24px;
+  border-radius:26px;
+  box-shadow:var(--shadow);
+  padding:26px;
 }
 
-/* Header */
+/* ===== CARD HEADER ===== */
 .card h2{
   margin:0;
-  color:#ff4d6d;
+  text-align:center;
+  color:var(--rose);
   font-weight:600;
 }
 
-/* Text area (typing happens here) */
+/* ===== TEXT AREA ===== */
 .text-area{
   margin-top:16px;
-  height:280px;               /* FIXED */
+  height:300px;
   overflow-y:auto;
-  text-align:left;
   font-size:16px;
-  line-height:1.8;
-  color:#444;
-  padding-right:4px;
+  line-height:1.9;
+  padding-right:6px;
 }
 
-/* Cursor */
+/* ===== CURSOR ===== */
 #cursor{
-  color:#ff4d6d;
+  color:var(--rose);
   animation:blink 1s infinite;
 }
 @keyframes blink{
@@ -72,48 +84,66 @@ body{
   25%,75%{opacity:0}
 }
 
-/* Buttons */
+/* ===== BUTTONS ===== */
 button{
-  margin-top:16px;
-  padding:10px 26px;
+  margin-top:18px;
+  padding:12px 30px;
   font-size:17px;
   border:none;
   border-radius:30px;
   cursor:pointer;
+  transition:transform .2s ease, box-shadow .2s ease;
 }
-#yes{background:#ff4d6d;color:white;}
-#no{background:#777;color:white;position:relative;}
-#replay{background:#ffd1df;color:#333;}
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 15px rgba(0,0,0,0.15);
+}
+#yes{
+  background:linear-gradient(135deg,#ff4d6d,#ff758f);
+  color:white;
+}
+#no{
+  background:linear-gradient(135deg,#999,#777);
+  color:white;
+  position:relative;
+}
+#replay{
+  background:linear-gradient(135deg,#ffd1dc,#ffe6ef);
+  color:#333;
+}
 
-/* Clouds */
+/* ===== CLOUD POPUPS ===== */
 .popup{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.35);
+  background:rgba(255,200,215,0.55);
 }
+
 .cloud{
-  background:#fff;
+  background:var(--card-white);
   width:300px;
-  padding:28px;
-  border-radius:60px;
+  padding:30px;
+  border-radius:70px;
   text-align:center;
-  margin:40% auto;
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  margin:42% auto;
+  box-shadow:var(--shadow);
   animation:float 4s ease-in-out infinite;
 }
 @keyframes float{
   0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
+  50%{transform:translateY(-12px)}
 }
 
-/* Hearts & petals */
+/* ===== HEARTS & PETALS ===== */
 .heart,.petal{
   position:absolute;
   font-size:26px;
   animation:fall 7s linear forwards;
 }
-@keyframes fall{to{top:110%;opacity:0}}
+@keyframes fall{
+  to{top:110%;opacity:0}
+}
 </style>
 </head>
 
@@ -130,17 +160,22 @@ button{
   <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_66a07b7c94.mp3">
 </audio>
 
+<!-- Envelope -->
 <div id="envelope">💌</div>
 
 <!-- Question Card -->
 <div class="card" id="questionCard">
   <h2>Ashwini 💖</h2>
-  <p style="margin-top:18px;">Will you be my Valentine? 💌</p>
-  <button id="yes">Yes</button>
-  <button id="no">No</button>
+  <p style="margin-top:22px;text-align:center;">
+    Will you be my Valentine? 💌
+  </p>
+  <div style="text-align:center;">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
 </div>
 
-<!-- Cloud Popups -->
+<!-- Popup 1 -->
 <div class="popup" id="p1">
   <div class="cloud">
     ☁️ Are you sure? 🥺<br><br>
@@ -149,6 +184,7 @@ button{
   </div>
 </div>
 
+<!-- Popup 2 -->
 <div class="popup" id="p2">
   <div class="cloud">
     ☁️ Still no? 💔<br><br>
@@ -162,7 +198,9 @@ button{
   <h2>Ashwini 💗</h2>
   <div class="text-area" id="finalText"></div>
   <span id="cursor">|</span>
-  <button id="replay">🔁 Replay</button>
+  <div style="text-align:center;">
+    <button id="replay">🔁 Replay</button>
+  </div>
 </div>
 
 <script>
@@ -187,7 +225,7 @@ envelope.onclick=()=>{
   },2000);
 };
 
-no.onclick=()=>document.getElementById("p1").style.display="block";
+no.onclick=()=>p1.style.display="block";
 function closeP1(){p1.style.display="none";p2.style.display="block";}
 function enableRun(){
   p2.style.display="none";
