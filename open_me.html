@@ -9,53 +9,43 @@
 body{
   margin:0;
   overflow:hidden;
-  background:linear-gradient(#87ceeb,#fff);
+  background:#ffe6f0;
   font-family:Arial, sans-serif;
 }
 
-/* Plane */
-#plane{
+/* Envelope */
+#envelope{
   position:absolute;
-  font-size:50px;
-  top:30%;
-  left:-80px;
-  animation:fly 4s linear infinite;
-}
-@keyframes fly{
-  0%{left:-80px;top:20%}
-  50%{left:110%;top:40%}
-  100%{left:-80px;top:60%}
-}
-.crash{
-  animation:crash 2s forwards;
-}
-@keyframes crash{
-  to{
-    left:50%;
-    top:80%;
-    transform:rotate(90deg);
-  }
-}
-
-/* Teddy */
-#teddy{
-  display:none;
-  position:absolute;
-  bottom:15%;
+  top:35%;
   left:50%;
   transform:translateX(-50%);
-  font-size:80px;
+  font-size:100px;
+  cursor:pointer;
+  transition:transform 1s;
+}
+.opened{
+  transform:translateX(-50%) rotateX(180deg);
 }
 
-/* Message */
-#question{
+/* Card */
+#card{
   display:none;
   position:absolute;
-  top:10%;
-  width:100%;
+  top:30%;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  width:280px;
+  padding:20px;
+  border-radius:15px;
   text-align:center;
-  font-size:24px;
+  animation:slideUp 2s ease-out forwards;
 }
+@keyframes slideUp{
+  from{top:45%;opacity:0}
+  to{top:30%;opacity:1}
+}
+
 button{
   padding:10px 25px;
   font-size:18px;
@@ -110,12 +100,11 @@ button{
 
 <body>
 
-<div id="plane">✈️</div>
-<div id="teddy">🧸🌹</div>
+<div id="envelope">💌</div>
 
-<div id="question">
+<div id="card">
   Will you be my Valentine? ❤️
-  <br>
+  <br><br>
   <button id="yes">Yes</button>
   <button id="no">No</button>
 </div>
@@ -160,14 +149,17 @@ I love you ❤️
 </div>
 
 <script>
-const plane=document.getElementById("plane");
-const teddy=document.getElementById("teddy");
-const q=document.getElementById("question");
+const envelope=document.getElementById("envelope");
+const card=document.getElementById("card");
 const no=document.getElementById("no");
 
-setTimeout(()=>plane.classList.add("crash"),3500);
-setTimeout(()=>teddy.style.display="block",6000);
-setTimeout(()=>q.style.display="block",8000);
+envelope.onclick=()=>{
+  envelope.classList.add("opened");
+  setTimeout(()=>{
+    envelope.style.display="none";
+    card.style.display="block";
+  },1000);
+}
 
 no.onclick=()=>document.getElementById("p1").style.display="block";
 
