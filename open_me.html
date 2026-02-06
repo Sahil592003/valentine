@@ -6,77 +6,75 @@
 <title>For Ashwini ❤️</title>
 
 <style>
-/* ===== COLOR VARIABLES ===== */
-:root{
-  --rose:#ff4d6d;
-  --rose-soft:#ffd1dc;
-  --rose-light:#fff1f6;
-  --card-white:rgba(255,255,255,0.96);
-  --text-dark:#444;
-  --shadow:0 20px 40px rgba(0,0,0,0.15);
-}
-
-/* ===== BASE ===== */
 body{
   margin:0;
   overflow:hidden;
-  background:linear-gradient(135deg,#ffd6e8,#fff1f6);
+  background:#ffe6f0;
   font-family:'Segoe UI',sans-serif;
-  color:var(--text-dark);
 }
 
-/* ===== ENVELOPE SCREEN ===== */
+/* Envelope */
 #envelope{
   position:absolute;
   top:40%;
   left:50%;
   transform:translateX(-50%);
-  font-size:120px;
+  font-size:110px;
   cursor:pointer;
-  filter:drop-shadow(0 8px 15px rgba(0,0,0,0.15));
   transition:transform 2.5s ease;
 }
 #envelope.opened{
-  transform:translateX(-50%) rotateX(180deg) scale(1.15);
+  transform:translateX(-50%) rotateX(180deg) scale(1.1);
 }
 
-/* ===== CARD BASE ===== */
+/* Card */
 .card{
   display:none;
-  position:fixed;
-  top:50%;
+  position:absolute;
   left:50%;
-  transform:translate(-50%,-50%);
-  width:350px;
-  height:480px;
-  background:var(--card-white);
-  backdrop-filter:blur(6px);
-  border-radius:26px;
-  box-shadow:var(--shadow);
+  transform:translateX(-50%);
+  background:white;
+  width:320px;
   padding:26px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  animation:slideUp 3s ease forwards;
+}
+#questionCard{ top:60%; }
+#finalCard{ top:50%; animation:fadeIn 3s ease forwards; }
+
+@keyframes slideUp{
+  from{top:75%;opacity:0}
+  to{top:42%;opacity:1}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
 }
 
-/* ===== CARD HEADER ===== */
-.card h2{
-  margin:0;
-  text-align:center;
-  color:var(--rose);
+#name{
+  font-size:24px;
+  color:#ff4d6d;
+  margin-bottom:12px;
   font-weight:600;
 }
 
-/* ===== TEXT AREA ===== */
-.text-area{
-  margin-top:16px;
-  height:300px;
-  overflow-y:auto;
-  font-size:16px;
-  line-height:1.9;
-  padding-right:6px;
+button{
+  padding:10px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  margin:12px;
 }
+#yes{background:#ff4d6d;color:white;}
+#no{background:#666;color:white;position:relative;}
+#replay{background:#ffb3c6;color:#333;}
 
-/* ===== CURSOR ===== */
+/* Cursor */
 #cursor{
-  color:var(--rose);
+  display:inline-block;
+  margin-left:2px;
   animation:blink 1s infinite;
 }
 @keyframes blink{
@@ -84,66 +82,44 @@ body{
   25%,75%{opacity:0}
 }
 
-/* ===== BUTTONS ===== */
-button{
-  margin-top:18px;
-  padding:12px 30px;
-  font-size:17px;
-  border:none;
-  border-radius:30px;
-  cursor:pointer;
-  transition:transform .2s ease, box-shadow .2s ease;
-}
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 6px 15px rgba(0,0,0,0.15);
-}
-#yes{
-  background:linear-gradient(135deg,#ff4d6d,#ff758f);
-  color:white;
-}
-#no{
-  background:linear-gradient(135deg,#999,#777);
-  color:white;
-  position:relative;
-}
-#replay{
-  background:linear-gradient(135deg,#ffd1dc,#ffe6ef);
-  color:#333;
-}
-
 /* ===== CLOUD POPUPS ===== */
 .popup{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(255,200,215,0.55);
+  background:rgba(0,0,0,0.4);
 }
-
 .cloud{
-  background:var(--card-white);
+  position:relative;
+  background:#fff;
   width:300px;
-  padding:30px;
-  border-radius:70px;
+  padding:30px 25px;
+  border-radius:60px;
   text-align:center;
-  margin:42% auto;
-  box-shadow:var(--shadow);
-  animation:float 4s ease-in-out infinite;
+  margin:40% auto;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  animation:floatCloud 4s ease-in-out infinite;
 }
-@keyframes float{
+@keyframes floatCloud{
   0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-12px)}
+  50%{transform:translateY(-10px)}
 }
+.cloud::before,.cloud::after{
+  content:"";
+  position:absolute;
+  background:#fff;
+  border-radius:50%;
+}
+.cloud::before{width:80px;height:80px;top:-40px;left:40px;}
+.cloud::after{width:100px;height:100px;top:-50px;right:40px;}
 
-/* ===== HEARTS & PETALS ===== */
+/* Hearts & petals */
 .heart,.petal{
   position:absolute;
   font-size:26px;
   animation:fall 7s linear forwards;
 }
-@keyframes fall{
-  to{top:110%;opacity:0}
-}
+@keyframes fall{to{top:110%;opacity:0}}
 </style>
 </head>
 
@@ -160,25 +136,24 @@ button:hover{
   <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_66a07b7c94.mp3">
 </audio>
 
-<!-- Envelope -->
 <div id="envelope">💌</div>
 
 <!-- Question Card -->
 <div class="card" id="questionCard">
-  <h2>Ashwini 💖</h2>
-  <p style="margin-top:22px;text-align:center;">
-    Will you be my Valentine? 💌
-  </p>
-  <div style="text-align:center;">
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
-  </div>
+  <div id="name">Ashwini 💖</div>
+  Will you be my Valentine? 💌
+  <br><br>
+  <button id="yes">Yes</button>
+  <button id="no">No</button>
 </div>
 
 <!-- Popup 1 -->
 <div class="popup" id="p1">
   <div class="cloud">
-    ☁️ Are you sure? 🥺<br><br>
+    ☁️ Are you sure? 🥺<br>
+    Please think once more…<br><br>
+    Will you be my Valentine? 💌
+    <br><br>
     <button onclick="closeP1()">Yes</button>
     <button onclick="closeP1()">No</button>
   </div>
@@ -187,7 +162,10 @@ button:hover{
 <!-- Popup 2 -->
 <div class="popup" id="p2">
   <div class="cloud">
-    ☁️ Still no? 💔<br><br>
+    ☁️ Still no? 💔<br>
+    You’re really breaking my heart…<br><br>
+    Will you be my Valentine? 💌
+    <br><br>
     <button onclick="enableRun()">Yes</button>
     <button onclick="enableRun()">No</button>
   </div>
@@ -195,12 +173,11 @@ button:hover{
 
 <!-- Final Card -->
 <div class="card" id="finalCard">
-  <h2>Ashwini 💗</h2>
-  <div class="text-area" id="finalText"></div>
+  <div id="name">Ashwini 💗</div>
+  <div id="finalText" style="text-align:left;font-size:16px;line-height:1.8;"></div>
   <span id="cursor">|</span>
-  <div style="text-align:center;">
-    <button id="replay">🔁 Replay</button>
-  </div>
+  <br><br>
+  <button id="replay">🔁 Replay</button>
 </div>
 
 <script>
@@ -225,11 +202,12 @@ envelope.onclick=()=>{
   },2000);
 };
 
-no.onclick=()=>p1.style.display="block";
-function closeP1(){p1.style.display="none";p2.style.display="block";}
+no.onclick=()=>document.getElementById("p1").style.display="block";
+function closeP1(){document.getElementById("p1").style.display="none";document.getElementById("p2").style.display="block";}
 function enableRun(){
-  p2.style.display="none";
+  document.getElementById("p2").style.display="none";
   no.onmouseover=()=>{
+    no.style.position="absolute";
     no.style.left=Math.random()*80+"%";
     no.style.top=Math.random()*80+"%";
   };
@@ -240,36 +218,38 @@ document.getElementById("yes").onclick=()=>{
   setTimeout(()=>{
     questionCard.style.display="none";
     finalCard.style.display="block";
-    fadeMusic();
-    typeMessage();
+    fadeOutMusic();
+    typeFinalMessage();
   },2500);
 };
 
+/* Typing effect + sound */
 const message=`🌸 Hey Ashwini,
 
 I know I haven’t always been perfect.
-I know I made mistakes that hurt you 💔
+There were moments where my words hurt you,
+my actions disappointed you,
+and my silence made things worse 💔
 
-But one thing never changed —
-my feelings for you ❤️
+But one thing has always been true —
+my feelings for you have never been fake ❤️
 
 I don’t promise perfection,
-but I promise effort, honesty,
+but I promise honesty, effort, patience,
 and a heart that chooses you every single day 🤍
 
 No pressure. No forcing.
 Just a genuine heart asking —
 can we walk this journey together? 💖`;
 
-function typeMessage(){
+function typeFinalMessage(){
   finalText.innerHTML="";
-  cursor.style.display="inline";
+  cursor.style.display="inline-block";
   let i=0;
   typeSound.volume=0.15;
   typeSound.play();
   const interval=setInterval(()=>{
     finalText.innerHTML+=message.charAt(i).replace(/\n/g,"<br>");
-    finalText.scrollTop=finalText.scrollHeight;
     i++;
     if(i>=message.length){
       clearInterval(interval);
@@ -279,13 +259,15 @@ function typeMessage(){
   },45);
 }
 
-function fadeMusic(){
-  const f=setInterval(()=>{
-    if(bgMusic.volume>0.02) bgMusic.volume-=0.02;
-    else{bgMusic.pause();clearInterval(f);}
+/* Fade-out music */
+function fadeOutMusic(){
+  const fade=setInterval(()=>{
+    if(bgMusic.volume>0.02){bgMusic.volume-=0.02;}
+    else{bgMusic.pause();clearInterval(fade);}
   },300);
 }
 
+/* Replay */
 document.getElementById("replay").onclick=()=>location.reload();
 
 function hearts(){
