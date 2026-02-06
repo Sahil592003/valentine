@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
+
+<style>
+body{
+  margin:0;
+  overflow:hidden;
+  background:linear-gradient(#87ceeb,#fff);
+  font-family:Arial, sans-serif;
+}
+
+/* Plane */
+#plane{
+  position:absolute;
+  font-size:50px;
+  top:30%;
+  left:-80px;
+  animation:fly 4s linear infinite;
+}
+@keyframes fly{
+  0%{left:-80px;top:20%}
+  50%{left:110%;top:40%}
+  100%{left:-80px;top:60%}
+}
+.crash{
+  animation:crash 2s forwards;
+}
+@keyframes crash{
+  to{
+    left:50%;
+    top:80%;
+    transform:rotate(90deg);
+  }
+}
+
+/* Teddy */
+#teddy{
+  display:none;
+  position:absolute;
+  bottom:15%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:80px;
+}
+
+/* Message */
+#question{
+  display:none;
+  position:absolute;
+  top:10%;
+  width:100%;
+  text-align:center;
+  font-size:24px;
+}
+button{
+  padding:10px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:25px;
+  margin:10px;
+}
+#yes{background:#ff4d6d;color:white;}
+#no{background:#555;color:white;position:relative;}
+
+/* Popups */
+.popup{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+}
+.popupBox{
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  text-align:center;
+  width:80%;
+  max-width:300px;
+  margin:30% auto;
+}
+
+/* Hearts & petals */
+.heart,.petal{
+  position:absolute;
+  font-size:24px;
+  animation:fall 4s linear forwards;
+}
+@keyframes fall{
+  to{top:110%;opacity:0}
+}
+
+/* Final text */
+#final{
+  display:none;
+  position:fixed;
+  inset:5%;
+  background:rgba(255,255,255,0.95);
+  padding:20px;
+  border-radius:20px;
+  overflow:auto;
+  font-size:16px;
+  line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div id="plane">✈️</div>
+<div id="teddy">🧸🌹</div>
+
+<div id="question">
+  Will you be my Valentine? ❤️
+  <br>
+  <button id="yes">Yes</button>
+  <button id="no">No</button>
+</div>
+
+<!-- Popups -->
+<div class="popup" id="p1">
+  <div class="popupBox">
+    Are you sure? Think again 🥺
+    <br><br>
+    <button onclick="closeP1()">Yes</button>
+    <button onclick="closeP1()">No</button>
+  </div>
+</div>
+
+<div class="popup" id="p2">
+  <div class="popupBox">
+    Are you serious? 😢
+    <br><br>
+    <button onclick="enableRun()">Yes</button>
+    <button onclick="enableRun()">No</button>
+  </div>
+</div>
+
+<div id="final">
+Hey…  
+I know I have hurt you with my actions and my words in the past.  
+
+I know sometimes I behaved rude.  
+I am really sorry for that.  
+
+I know you have trust issues because of me,  
+but I promise I can completely remove those trust issues from your life.  
+
+I will never cheat on you.  
+I will stay loyal to you.  
+I will listen to everything you say.  
+
+I want you in my life forever and ever,  
+till my last breath.  
+
+I love you ❤️
+</div>
+
+<script>
+const plane=document.getElementById("plane");
+const teddy=document.getElementById("teddy");
+const q=document.getElementById("question");
+const no=document.getElementById("no");
+
+setTimeout(()=>plane.classList.add("crash"),3500);
+setTimeout(()=>teddy.style.display="block",6000);
+setTimeout(()=>q.style.display="block",8000);
+
+no.onclick=()=>document.getElementById("p1").style.display="block";
+
+function closeP1(){
+  document.getElementById("p1").style.display="none";
+  document.getElementById("p2").style.display="block";
+}
+
+function enableRun(){
+  document.getElementById("p2").style.display="none";
+  no.onmouseover=()=>{
+    no.style.position="absolute";
+    no.style.left=Math.random()*80+"%";
+    no.style.top=Math.random()*80+"%";
+  }
+}
+
+document.getElementById("yes").onclick=()=>{
+  hearts();
+  petals();
+  setTimeout(()=>document.getElementById("final").style.display="block",4000);
+}
+
+function hearts(){
+  setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"%";
+    h.style.top="0";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  },200);
+}
+
+function petals(){
+  setInterval(()=>{
+    let p=document.createElement("div");
+    p.className="petal";
+    p.innerText="🌹";
+    p.style.left=Math.random()*100+"%";
+    p.style.top="0";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),4000);
+  },300);
+}
+</script>
+
+</body>
+</html>
