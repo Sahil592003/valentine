@@ -69,9 +69,17 @@ button{
 }
 #yes{background:#ff4d6d;color:white;}
 #no{background:#666;color:white;position:relative;}
-#replay{
-  background:#ffb3c6;
-  color:#333;
+#replay{background:#ffb3c6;color:#333;}
+
+/* Cursor */
+#cursor{
+  display:inline-block;
+  margin-left:2px;
+  animation:blink 1s infinite;
+}
+@keyframes blink{
+  0%,50%,100%{opacity:1}
+  25%,75%{opacity:0}
 }
 
 /* ===== CLOUD POPUPS ===== */
@@ -81,8 +89,6 @@ button{
   inset:0;
   background:rgba(0,0,0,0.4);
 }
-
-/* Floating cloud */
 .cloud{
   position:relative;
   background:#fff;
@@ -94,27 +100,18 @@ button{
   box-shadow:0 10px 25px rgba(0,0,0,0.15);
   animation:floatCloud 4s ease-in-out infinite;
 }
-
 @keyframes floatCloud{
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-10px)}
 }
-
-.cloud::before,
-.cloud::after{
+.cloud::before,.cloud::after{
   content:"";
   position:absolute;
   background:#fff;
   border-radius:50%;
 }
-.cloud::before{
-  width:80px;height:80px;
-  top:-40px;left:40px;
-}
-.cloud::after{
-  width:100px;height:100px;
-  top:-50px;right:40px;
-}
+.cloud::before{width:80px;height:80px;top:-40px;left:40px;}
+.cloud::after{width:100px;height:100px;top:-50px;right:40px;}
 
 /* Hearts & petals */
 .heart,.petal{
@@ -122,9 +119,7 @@ button{
   font-size:26px;
   animation:fall 7s linear forwards;
 }
-@keyframes fall{
-  to{top:110%;opacity:0}
-}
+@keyframes fall{to{top:110%;opacity:0}}
 </style>
 </head>
 
@@ -136,6 +131,9 @@ button{
 </audio>
 <audio id="bgMusic" preload="auto" loop>
   <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_2c7b0e4d5b.mp3">
+</audio>
+<audio id="typeSound" preload="auto">
+  <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_66a07b7c94.mp3">
 </audio>
 
 <div id="envelope">💌</div>
@@ -176,21 +174,9 @@ button{
 <!-- Final Card -->
 <div class="card" id="finalCard">
   <div id="name">Ashwini 💗</div>
-  <div style="text-align:left;font-size:16px;line-height:1.8;">
-    🌸 Hey Ashwini,<br><br>
-
-    I know I haven’t always been perfect,  
-    but my feelings for you have always been real ❤️<br><br>
-
-    I don’t promise perfection,  
-    but I promise honesty, effort, patience,  
-    and a heart that chooses you every single day 🤍<br><br>
-
-    No pressure. No forcing.  
-    Just a genuine heart asking —  
-    can we walk this journey together? 💖
-  </div>
-  <br>
+  <div id="finalText" style="text-align:left;font-size:16px;line-height:1.8;"></div>
+  <span id="cursor">|</span>
+  <br><br>
   <button id="replay">🔁 Replay</button>
 </div>
 
@@ -198,11 +184,12 @@ button{
 const envelope=document.getElementById("envelope");
 const questionCard=document.getElementById("questionCard");
 const finalCard=document.getElementById("finalCard");
+const finalText=document.getElementById("finalText");
+const cursor=document.getElementById("cursor");
 const no=document.getElementById("no");
 const openSound=document.getElementById("openSound");
 const bgMusic=document.getElementById("bgMusic");
-
-let musicFadeInterval=null;
+const typeSound=document.getElementById("typeSound");
 
 envelope.onclick=()=>{
   openSound.play();
@@ -216,12 +203,7 @@ envelope.onclick=()=>{
 };
 
 no.onclick=()=>document.getElementById("p1").style.display="block";
-
-function closeP1(){
-  document.getElementById("p1").style.display="none";
-  document.getElementById("p2").style.display="block";
-}
-
+function closeP1(){document.getElementById("p1").style.display="none";document.getElementById("p2").style.display="block";}
 function enableRun(){
   document.getElementById("p2").style.display="none";
   no.onmouseover=()=>{
@@ -232,31 +214,61 @@ function enableRun(){
 }
 
 document.getElementById("yes").onclick=()=>{
-  hearts();
-  petals();
+  hearts();petals();
   setTimeout(()=>{
     questionCard.style.display="none";
     finalCard.style.display="block";
     fadeOutMusic();
+    typeFinalMessage();
   },2500);
 };
 
+/* Typing effect + sound */
+const message=`🌸 Hey Ashwini,
+
+I know I haven’t always been perfect.
+There were moments where my words hurt you,
+my actions disappointed you,
+and my silence made things worse 💔
+
+But one thing has always been true —
+my feelings for you have never been fake ❤️
+
+I don’t promise perfection,
+but I promise honesty, effort, patience,
+and a heart that chooses you every single day 🤍
+
+No pressure. No forcing.
+Just a genuine heart asking —
+can we walk this journey together? 💖`;
+
+function typeFinalMessage(){
+  finalText.innerHTML="";
+  cursor.style.display="inline-block";
+  let i=0;
+  typeSound.volume=0.15;
+  typeSound.play();
+  const interval=setInterval(()=>{
+    finalText.innerHTML+=message.charAt(i).replace(/\n/g,"<br>");
+    i++;
+    if(i>=message.length){
+      clearInterval(interval);
+      typeSound.pause();
+      typeSound.currentTime=0;
+    }
+  },45);
+}
+
 /* Fade-out music */
 function fadeOutMusic(){
-  musicFadeInterval=setInterval(()=>{
-    if(bgMusic.volume>0.02){
-      bgMusic.volume-=0.02;
-    }else{
-      bgMusic.pause();
-      clearInterval(musicFadeInterval);
-    }
+  const fade=setInterval(()=>{
+    if(bgMusic.volume>0.02){bgMusic.volume-=0.02;}
+    else{bgMusic.pause();clearInterval(fade);}
   },300);
 }
 
 /* Replay */
-document.getElementById("replay").onclick=()=>{
-  location.reload();
-};
+document.getElementById("replay").onclick=()=>location.reload();
 
 function hearts(){
   setInterval(()=>{
@@ -269,7 +281,6 @@ function hearts(){
     setTimeout(()=>h.remove(),7000);
   },300);
 }
-
 function petals(){
   setInterval(()=>{
     const p=document.createElement("div");
